@@ -40,6 +40,16 @@
     transform: scale(0.98);
 }
 
+.filter-button {
+  background-color: #007bff;
+  color: white;
+}
+
+.filter-button:hover {
+  background-color: #0056b3;
+}
+
+
 @media (max-width: 48rem) {
     .button {
         width: 100%;

@@ -1,5 +1,5 @@
 import './styles/ProductCard.css';
-import Button from './Button';
+import Button from './ProductAction';
 
 export default function ProductCard({ product }) {
     return <> 
