@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
-import { useLoaderData, Link } from 'react-router-dom';
+import { useLoaderData } from 'react-router-dom';
 import ProductFilter from './ProductFilter';
 import ProductDeck from './ProductDeck';
+import '../styles/ProductList.css';
 
 export default function ProductList() {
   const allProducts = useLoaderData();
@@ -28,12 +29,9 @@ export default function ProductList() {
   };
 
   return (
-    <>
-      <Link to="/produtos/novo">
-        <button className="button new-product-button">Novo produto</button>
-      </Link>
+    <div className="main-content-wrapper">
       <ProductFilter onFilter={handleFilterChange} />
       <ProductDeck products={filteredProducts} />
-    </>
+    </div>
   );
 }

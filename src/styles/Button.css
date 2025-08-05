@@ -12,7 +12,6 @@
     align-items: center;
 }
 
-
 .edit-button {
     background-color: #e0e0e0;
     color: #333;
@@ -29,6 +28,7 @@
 
 .delete-button {
     background-color: #dc3545;
+    color: white;
 }
 
 .delete-button:hover {
@@ -49,6 +49,23 @@
   background-color: #0056b3;
 }
 
+.create-button {
+    background-color: #28a745;
+    color: white;
+}
+
+.create-button:hover {
+    background-color: #218838;
+}
+
+.cancel-button {
+    background-color: #dc3545;
+    color: white;
+}
+
+.cancel-button:hover {
+    background-color: #c82333;
+}
 
 @media (max-width: 48rem) {
     .button {
