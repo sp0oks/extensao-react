@@ -1,4 +1,4 @@
-import './styles/Button.css';
+import '../styles/Button.css';
 
 function geraBotao(className) {
     if (className === 'edit-button') {

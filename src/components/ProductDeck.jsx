@@ -1,4 +1,4 @@
-import './styles/ProductDeck.css';
+import '../styles/ProductDeck.css';
 import ProductCard from './ProductCard';
 
 export default function ProductDeck({ products }) {

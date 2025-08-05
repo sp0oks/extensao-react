@@ -1,4 +1,4 @@
-import './styles/ProductCard.css';
+import '../styles/ProductCard.css';
 import Button from './ProductAction';
 
 export default function ProductCard({ product }) {

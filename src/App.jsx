@@ -1,44 +1,41 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
+import { Outlet, Link } from 'react-router-dom';
 import './styles/App.css';
-import ProductFilter from './ProductFilter';
-import ProductDeck from './ProductDeck';
-import data from './data.json'
 
 export default function App() {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [filteredProducts, setFilteredProducts] = useState(data);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  useEffect(() => {
-    if (searchTerm === '') {
-      setFilteredProducts(data);
-      return;
-    }
-
-    // const lowercasedSearchTerm = searchTerm.toLowerCase();
-    const searchID = parseInt(searchTerm, 10);
-    
-    if (isNaN(searchID)) {
-      setFilteredProducts([]);
-    } else {
-      const results = data.filter(product => {
-      //  const matchesName = product.name.toLowerCase().includes(lowercasedSearchTerm);
-      //  const matchesCategory = product.category && product.category.toLowerCase().includes(lowercasedSearchTerm);
-      //  return matchesName || matchesCategory;
-        return product.id === searchID;
-      });
-      setFilteredProducts(results);
-    }
-  }, [searchTerm]);
-
-  const handleFilterChange = (newSearchTerm) => {
-    setSearchTerm(newSearchTerm);
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
   };
 
-  return <>
+  return (
     <div className="app-wrapper">
-      <h1>Catálogo de Produtos</h1>
-      <ProductFilter onFilter={handleFilterChange} />
-      <ProductDeck products={filteredProducts} />
+      <header className="app-header">
+        <button className="menu-toggle" onClick={toggleMenu}>
+          &#9776;
+        </button>
+        <div className="logo-container">
+          <Link to="/" className="app-logo">Catálogo de Produtos</Link>
+        </div>
+      </header>
+
+      <div className={`sidebar ${isMenuOpen ? 'open' : ''}`}>
+        <nav>
+          <ul>
+            <li>
+              <Link to="/" onClick={toggleMenu}>Lista de Produtos</Link>
+            </li>
+            <li>
+              <Link to="/produtos/novo" onClick={toggleMenu}>Novo Produto</Link>
+            </li>
+          </ul>
+        </nav>
+      </div>
+
+      <main className="app-content">
+        <Outlet />
+      </main>
     </div>
-  </>
+  );
 }
