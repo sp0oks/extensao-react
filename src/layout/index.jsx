@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { Outlet, Link } from 'react-router-dom';
-import './styles/App.css';
 
-export default function App() {
+import '../styles/Layout.css';
+
+export default function Layout() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const toggleMenu = () => {
@@ -16,7 +17,7 @@ export default function App() {
           &#9776;
         </button>
         <div className="logo-container">
-          <Link to="/" className="app-logo">Catálogo de Produtos</Link>
+          <Link to="/produtos" className="app-logo">Catálogo de Produtos</Link>
         </div>
       </header>
 
@@ -24,7 +25,7 @@ export default function App() {
         <nav>
           <ul>
             <li>
-              <Link to="/" onClick={toggleMenu}>Lista de Produtos</Link>
+              <Link to="/produtos" onClick={toggleMenu}>Lista de Produtos</Link>
             </li>
             <li>
               <Link to="/produtos/novo" onClick={toggleMenu}>Novo Produto</Link>

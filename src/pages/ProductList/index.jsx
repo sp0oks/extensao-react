@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useLoaderData } from 'react-router-dom';
+
 import ProductFilter from './ProductFilter';
 import ProductDeck from './ProductDeck';
-import '../styles/ProductList.css';
+
+import '../../styles/ProductList.css';
 
 export default function ProductList() {
   const allProducts = useLoaderData();

@@ -1,6 +1,9 @@
 import { useState } from 'react';
-import '../styles/ProductFilter.css';
-import '../styles/Button.css';
+
+import ProductAction from './ProductAction';
+
+import '../../styles/ProductFilter.css';
+
 
 export default function ProductFilter({ onFilter }) {
   const [pendingSearchTerm, setPendingSearchTerm] = useState('');
@@ -27,8 +30,6 @@ export default function ProductFilter({ onFilter }) {
         onKeyDown={handleKeyPress}
         className="search-input"
       />
-      <button onClick={handleFilterClick} className="button filter-button">
-        Filtrar
-      </button>
+      <ProductAction type="filter-button" action={handleFilterClick} text='Filtrar' />
   </div>
 }

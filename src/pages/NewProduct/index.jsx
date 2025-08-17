@@ -1,6 +1,7 @@
 import { Form, useNavigate } from 'react-router-dom';
-import '../styles/Form.css';
-import '../styles/Button.css';
+
+import '../../styles/Form.css';
+import '../../styles/Button.css';
 
 export default function NewProduct() {
   const navigate = useNavigate();
