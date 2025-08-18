@@ -12,18 +12,17 @@ export default function ProductList() {
   const [filteredProducts, setFilteredProducts] = useState(allProducts);
 
   useEffect(() => {
-    if (searchTerm === '') {
-      setFilteredProducts(allProducts);
-      return;
-    }
-    const searchID = parseInt(searchTerm, 10);
-    
-    if (isNaN(searchID)) {
-      setFilteredProducts([]);
-    } else {
-      const results = allProducts.filter(product => product.id === searchID);
+    const timeoutId = setTimeout(() => {
+      if (searchTerm === '') {
+        setFilteredProducts(allProducts);
+        return;
+      }
+
+      const results = allProducts.filter(product => product.code.toString().startsWith(searchTerm));
       setFilteredProducts(results);
-    }
+    }, 500);
+
+    return () => clearTimeout(timeoutId);
   }, [searchTerm, allProducts]);
 
   const handleFilterChange = (newSearchTerm) => {

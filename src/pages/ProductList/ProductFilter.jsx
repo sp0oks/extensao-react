@@ -1,35 +1,26 @@
 import { useState } from 'react';
 
-import ProductAction from './ProductAction';
-
 import '../../styles/ProductFilter.css';
 
 
 export default function ProductFilter({ onFilter }) {
-  const [pendingSearchTerm, setPendingSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState('');
 
-  const handlePendingSearchChange = (event) => {
-    setPendingSearchTerm(event.target.value);
+  const handleSearchChange = (event) => {
+    const numericValue = event.target.value.replace(/[^0-9]/g, '');
+    setSearchTerm(numericValue);
+    onFilter(numericValue);
   };
-
-  const handleFilterClick = () => {
-    onFilter(pendingSearchTerm);
-  };
-
-  const handleKeyPress = (event) => {
-    if (event.key === 'Enter') {
-      handleFilterClick();
-    }
-  }
 
   return <div className="filter-controls">
       <input
+        type="text"
+        inputMode="numeric"
+        pattern="[0-9]*"
         placeholder="Filtrar por código..."
-        value={pendingSearchTerm}
-        onChange={handlePendingSearchChange}
-        onKeyDown={handleKeyPress}
+        value={searchTerm}
+        onChange={handleSearchChange}
         className="search-input"
       />
-      <ProductAction type="filter-button" action={handleFilterClick} text='Filtrar' />
   </div>
 }

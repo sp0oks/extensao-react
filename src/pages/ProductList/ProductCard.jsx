@@ -1,4 +1,4 @@
-import ProductAction from './ProductAction';
+import Button from '../../components/Button';
 
 import '../../styles/ProductCard.css';
 
@@ -14,8 +14,8 @@ export default function ProductCard({ product }) {
                 <p class='product-price'>R$ {Number(product.price).toFixed(2)}</p>
             </div>
             <div class='product-actions'>
-                <ProductAction type='edit-button' text='Editar' />
-                <ProductAction type='delete-button' text='Excluir' />
+                <Button type='edit-button' text='Editar' />
+                <Button type='delete-button' text='Excluir' />
             </div>
         </div>
     </>
