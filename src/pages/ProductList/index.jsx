@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useLoaderData } from 'react-router-dom';
+import { useLoaderData } from 'react-router';
 
 import ProductFilter from './ProductFilter';
 import ProductDeck from './ProductDeck';

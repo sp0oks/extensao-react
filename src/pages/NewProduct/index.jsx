@@ -1,4 +1,4 @@
-import { Form, useNavigate } from 'react-router-dom';
+import { Form, useNavigate } from 'react-router';
 
 import Button from '../../components/Button'
 
