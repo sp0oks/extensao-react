@@ -66,6 +66,35 @@
     margin-left: auto;
 }
 
+.product-details-edit {
+    flex-grow: 1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+    align-items: center;
+}
+
+.product-input,
+.product-input-title,
+.product-textarea {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 0.5rem;
+    font-size: 0.9rem;
+    box-sizing: border-box;
+}
+
+.product-input-title,
+.product-textarea {
+    grid-column: 1 / -1;
+}
+
+.product-textarea {
+    min-height: 5rem;
+    resize: vertical;
+}
+
 @media (max-width: 48rem) {
     .product-card {
         flex-direction: column;

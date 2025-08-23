@@ -1,11 +1,9 @@
-import { createBrowserRouter, RouterProvider } from 'react-router';
+import { createBrowserRouter, RouterProvider, redirect } from 'react-router';
 import axios from 'axios';
 
 import Layout from '../layout';
 import ProductList from './ProductList';
 import NewProduct from './NewProduct';
-
-const API_URL = 'http://localhost:3001/api/product'
 
 const router = createBrowserRouter([
   {
@@ -17,7 +15,7 @@ const router = createBrowserRouter([
         element: <ProductList />,
         loader: async () => {
           try {
-            const response = await axios.get(API_URL);
+            const response = await axios.get(process.env.REACT_APP_API_URL);
             console.log(response.data);
             return (response.data).map(product => ({
               ...product,
@@ -31,16 +29,18 @@ const router = createBrowserRouter([
         action: async ({ request }) => {
           const formData = await request.formData();
           try {
-            return await axios.post(API_URL, {
+            await axios.post(process.env.REACT_APP_API_URL, {
               name: formData.get('name'),
               description: formData.get('description'),
               price: formData.get('price'),
               category: formData.get('category'),
               pictureUrl: formData.get('picture-url'),
             });
+            return redirect('/produtos')
           } catch (error) {
             console.log(error);
             alert(error);
+            return { error: "Falha ao criar produto" }
           }
         }
       },
