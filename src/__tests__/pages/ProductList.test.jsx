@@ -1,13 +1,19 @@
-import { render, screen, act } from '@testing-library/react';
+import { render, screen, act, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { useLoaderData } from 'react-router';
+import { useLoaderData } from 'react-router-dom';
+import Papa from 'papaparse';
 
 import ProductList from '../../pages/ProductList';
+import apiClient from '../../api/apiClient';
 
-jest.mock('react-router', () => ({
-  ...jest.requireActual('react-router'),
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
   useLoaderData: jest.fn(),
 }));
+jest.mock('../../api/apiClient');
+jest.mock('papaparse');
+
+global.alert = jest.fn();
 
 const mockProducts = [
   {
@@ -46,7 +52,8 @@ const mockProducts = [
 
 describe('ProductList', () => {
   beforeEach(() => {
-    useLoaderData.mockReturnValue(mockProducts);
+    useLoaderData.mockReturnValue([...mockProducts]);
+    jest.clearAllMocks();
   });
 
   it('Displays product list correctly', async () => {
@@ -66,7 +73,6 @@ describe('ProductList', () => {
   it('Filters product list accordingly', async () => {
     jest.useFakeTimers();
     const user = userEvent.setup({ advanceTimers: jest.advanceTimersByTime });
-    
     render(<ProductList />);
 
     const input = screen.getByPlaceholderText('Filtrar por código...');
@@ -83,5 +89,59 @@ describe('ProductList', () => {
     expect(productTitles).toHaveLength(2);
     expect(productTitles[0].textContent).toBe('(134) Smartphone Samsung Galaxy A56 5G Preto 128GB, 8GB RAM, Câmera Tripla até 50MP, Tela Super AMOLED 6.7", IP67, NFC, Vídeo HDR e Recursos AI');
     expect(productTitles[1].textContent).toBe('(135) Smartphone Samsung Galaxy A25 6,5" 256GB Azul Escuro 5G 8GB RAM Câm Tripla 50MP + Selfie 13MP Bateria 5000mAh Dual Chip');
+
+    jest.useRealTimers();
+  });
+
+  it('handles invalid file type selection', () => {
+    render(<ProductList />);
+
+    const fileInput = screen.getByLabelText(/arquivo csv/i);
+    const badFile = new File(['hello'], 'hello.txt', { type: 'text/plain' });
+
+    Object.defineProperty(fileInput, 'files', {
+      value: [badFile],
+    });
+
+    fireEvent.change(fileInput);
+    
+    expect(global.alert).toHaveBeenCalledWith('Extensão de arquivo inválida');
+  });
+
+  it('parses valid CSV, and updates main list after successful upload', async () => {
+      const user = userEvent.setup();
+      
+      const apiResponse = { id: 999, name: 'New CSV Product', price: 100, pictureUrl: 'https://example.com/image.jpg' };
+      apiClient.post.mockResolvedValue({ data: apiResponse });
+
+      const mockParsedData = [
+          { name: 'New CSV Product', price: '100', pictureUrl: 'https://example.com/image.jpg' },
+      ];
+      Papa.parse.mockImplementation((file, config) => {
+          config.complete({ data: mockParsedData });
+      });
+      
+      render(<ProductList />);
+
+      const submitButton = screen.getByRole('button', { name: /enviar/i });
+      const fileInput = screen.getByLabelText(/arquivo csv/i);
+      const goodFile = new File(['name,price\nNew CSV Product,100'], 'products.csv', { type: 'text/csv' });
+      
+      await user.upload(fileInput, goodFile);
+      
+      const previewCard = await screen.findByRole('heading', { name: /\(csv-0\) New CSV Product/i });
+      expect(previewCard).toBeInTheDocument();
+
+      const checkbox = await screen.findByLabelText(/incluir/i);
+      await user.click(checkbox);
+      await user.click(submitButton);
+
+      expect(await screen.findByText('Criado com sucesso!')).toBeInTheDocument();
+
+      const mainListHeading = await screen.findByRole('heading', { name: /\(999\) New CSV Product/i });
+      expect(mainListHeading).toBeInTheDocument();
+      
+      const allProductCards = screen.getAllByRole('button', { name: /editar/i });
+      expect(allProductCards).toHaveLength(mockProducts.length + 1);
   });
 });

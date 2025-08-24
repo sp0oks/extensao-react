@@ -1,10 +1,8 @@
 import { useState } from 'react';
 import Papa from 'papaparse';
-
 import apiClient from '../../api/apiClient';
 import Button from '../../components/Button';
 import ProductCard from './ProductCard';
-
 import '../../styles/ProductCSVUploader.css';
 
 export default function ProductCSVUploader({ onUploadSuccess }) {
@@ -12,35 +10,45 @@ export default function ProductCSVUploader({ onUploadSuccess }) {
     const [parsedProducts, setParsedProducts] = useState([]);
     const [submissionStatus, setSubmissionStatus] = useState({});
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [inputKey, setInputKey] = useState(Date.now());
 
     const handleFileChange = (event) => {
         const selectedFile = event.target.files[0];
-        if (!selectedFile) return;
 
-        if (!selectedFile.name.endsWith('.csv')) {
-            alert('Extensão de arquivo inválida');
-            event.target.value = null;
+        if (!selectedFile) {
             setFile(null);
             setParsedProducts([]);
             return;
         }
 
-        setFile(selectedFile);
+        if (!selectedFile.name.toLowerCase().endsWith('.csv')) {
+            alert('Extensão de arquivo inválida');
+            setInputKey(Date.now());
+            setFile(null);
+            setParsedProducts([]);
+            return;
+        }
+
         setSubmissionStatus({});
 
         Papa.parse(selectedFile, {
             header: true,
             skipEmptyLines: true,
             complete: (results) => {
-                const productsWithSelection = results.data.map((product, index) => ({
-                    ...product,
-                    id: product.id || `product-${index}`,
-                    code: product.id || index,
-                    price: parseFloat(product.price) || 0,
-                    name: product.name ? product.name.substring(0, 255) : '',
-                    description: product.description ? product.description.substring(0, 255) : '',
-                    isSelected: false,
-                }));
+                const productsWithSelection = results.data.map((product, index) => {
+                    const tempId = `csv-${index}`;
+                    return {
+                        name: product.name ? String(product.name).substring(0, 512) : '',
+                        description: product.description ? String(product.description).substring(0, 1024) : '',
+                        price: parseFloat(product.price) || 0,
+                        category: product.category ? String(product.category) : '',
+                        pictureUrl: product.pictureUrl ? String(product.pictureUrl).substring(0, 512) : '',
+                        id: tempId,
+                        code: tempId,
+                        isSelected: false,
+                    }
+                });
+                setFile(selectedFile);
                 setParsedProducts(productsWithSelection);
             },
         });
@@ -62,12 +70,11 @@ export default function ProductCSVUploader({ onUploadSuccess }) {
         }
 
         setIsSubmitting(true);
-        const newStatus = { ...submissionStatus };
+        const newStatus = {};
 
         const uploadPromises = productsToUpload.map(product =>
             apiClient.post('/produtos', product)
-                .then(response => { 
-                    console.log(`Got response ${response.data} from product creation`)
+                .then(response => {
                     newStatus[product.id] = { success: true, message: 'Criado com sucesso!' };
                     return response.data;
                 })
@@ -96,7 +103,7 @@ export default function ProductCSVUploader({ onUploadSuccess }) {
             <div className="uploader-controls">
                 <label htmlFor="csv-input">Arquivo CSV</label>
                 <div className="csv-input-group">
-                    <input id="csv-input" type="file" accept=".csv" onChange={handleFileChange} />
+                    <input key={inputKey} id="csv-input" type="file" accept=".csv" onChange={handleFileChange} />
                 </div>
                 <Button
                     text="Enviar"

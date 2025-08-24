@@ -53,3 +53,17 @@
   background-color: #f8d7da;
   color: #721c24;
 }
+
+.preview-item .product-actions {
+  display: flex;
+  justify-content: flex-end;
+  padding-right: 1rem;
+}
+
+.checkbox-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}

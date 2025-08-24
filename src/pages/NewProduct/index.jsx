@@ -1,4 +1,4 @@
-import { Form, useNavigate } from 'react-router';
+import { Form, useNavigate } from 'react-router-dom';
 
 import Button from '../../components/Button'
 
@@ -16,24 +16,24 @@ export default function NewProduct() {
       <h2>Cadastrar Novo Produto</h2>
       <Form action='/produtos' method='post'>
         <div className='form-group'>
-          <label>Nome:</label>
-          <input type='text' name='name' required />
+          <label htmlFor='name'>Nome:</label>
+          <input type='text' id='name' name='name' required />
         </div>
         <div className='form-group'>
-          <label>Preço:</label>
-          <input type='number'name='price' min='0' step='any' required />
+          <label htmlFor='price'>Preço:</label>
+          <input type='number' id='price' name='price' min='0' step='any' required />
         </div>
         <div className='form-group'>
-          <label>Categoria:</label>
-          <input type='text' name='category' required />
+          <label htmlFor='category'>Categoria:</label>
+          <input type='text' id='category' name='category' required />
         </div>
         <div className='form-group'>
-          <label>Foto:</label>
-          <input type='url' name='pictureUrl' required />
+          <label htmlFor='pictureUrl'>Foto:</label>
+          <input type='url' id='pictureUrl' name='pictureUrl' required />
         </div>
         <div className='form-group'>
-          <label>Descrição:</label>
-          <textarea name='description' required />
+          <label htmlFor='description'>Descrição:</label>
+          <textarea id='description' name='description' required />
         </div>
         <div className='form-buttons'>
           <Button type='submit create-button' text='Criar' />
