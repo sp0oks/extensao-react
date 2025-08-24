@@ -5,6 +5,7 @@ import { useDebounce } from '../../hooks/useDebounce';
 
 import ProductFilter from './ProductFilter';
 import ProductDeck from './ProductDeck';
+import ProductCSVUploader from './ProductCSVUploader';
 import EmptyDeck from './EmptyDeck';
 
 import '../../styles/ProductList.css';
@@ -35,21 +36,27 @@ export default function ProductList() {
     setProducts(newProducts);
   };
 
-
-  if (initialProducts.length === 0) return (
-    <div className="main-content-wrapper">
-      <ProductFilter onFilter={setSearchTerm} />
-      <EmptyDeck />
-    </div>
-  );
+  const handleProductCreate = (newlyCreatedProducts) => {
+    const formattedNewProducts = newlyCreatedProducts.map(product => ({
+        ...product,
+        code: product.id
+    }));
+    setProducts(prevProducts => [...prevProducts, ...formattedNewProducts]);
+  };
 
   return (
     <div className="main-content-wrapper">
-      <ProductFilter onFilter={setSearchTerm} />  
-      <ProductDeck products={filteredProducts}
-        onSave={handleProductUpdate}
-        onDelete={handleProductDelete}
-      />
+      <ProductCSVUploader onUploadSuccess={handleProductCreate} />
+      <ProductFilter onFilter={setSearchTerm} />
+      { 
+        initialProducts.length === 0 ? 
+        <EmptyDeck /> :
+        <ProductDeck 
+          products={filteredProducts}
+          onSave={handleProductUpdate}
+          onDelete={handleProductDelete}
+        />
+      }
     </div>
-  );
+  )
 }

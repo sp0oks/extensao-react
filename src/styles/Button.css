@@ -26,20 +26,6 @@
     transform: scale(0.98);
 }
 
-.delete-button {
-    background-color: #dc3545;
-    color: white;
-}
-
-.delete-button:hover {
-    background-color: #c82333;
-}
-
-.delete-button:active {
-    background-color: #bd2130;
-    transform: scale(0.98);
-}
-
 .filter-button {
   background-color: #007bff;
   color: white;
@@ -49,31 +35,34 @@
   background-color: #0056b3;
 }
 
-.create-button {
+.create-button,
+.save-button,
+.confirm-button {
     background-color: #28a745;
     color: white;
 }
 
-.create-button:hover {
+.create-button:hover,
+.save-button:hover,
+.confirm-buton:hover {
     background-color: #218838;
 }
 
-.save-button {
-    background-color: #28a745;
-    color: white;
-}
-
-.save-button:hover {
-    background-color: #218838;
-}
-
+.delete-button,
 .cancel-button {
     background-color: #dc3545;
     color: white;
 }
 
+.delete-button:hover,
 .cancel-button:hover {
     background-color: #c82333;
+}
+
+.delete-button:active,
+.cancel-button:active {
+    background-color: #bd2130;
+    transform: scale(0.98);
 }
 
 @media (max-width: 48rem) {

@@ -7,7 +7,7 @@ export default function ProductDeck({ products, onSave, onDelete }) {
         return <div className='product-deck-container'>
             {products.map(product => (
                     <ProductCard
-                        key={product.code}
+                        key={`product-${product.code}`}
                         product={product}
                         onSave={onSave}
                         onDelete={onDelete}

@@ -29,7 +29,7 @@ export default function NewProduct() {
         </div>
         <div className='form-group'>
           <label>Foto:</label>
-          <input type='url' name='picture-url' required />
+          <input type='url' name='pictureUrl' required />
         </div>
         <div className='form-group'>
           <label>Descrição:</label>

@@ -1,9 +1,9 @@
 import { createBrowserRouter, RouterProvider, redirect } from 'react-router';
-import axios from 'axios';
 
 import Layout from '../layout';
 import ProductList from './ProductList';
 import NewProduct from './NewProduct';
+import apiClient from '../api/apiClient';
 
 const router = createBrowserRouter([
   {
@@ -15,12 +15,15 @@ const router = createBrowserRouter([
         element: <ProductList />,
         loader: async () => {
           try {
-            const response = await axios.get(process.env.REACT_APP_API_URL);
+            const response = await apiClient.get(`${process.env.REACT_APP_API_URL}/produtos`);
             console.log(response.data);
-            return (response.data).map(product => ({
+            const products = (response.data).map(product => ({
               ...product,
               code: product.id,
             }));
+
+            products.sort((a,b) => a.code - b.code);
+            return products;
           } catch (error) {
             console.log(error);
             return [];
@@ -29,12 +32,12 @@ const router = createBrowserRouter([
         action: async ({ request }) => {
           const formData = await request.formData();
           try {
-            await axios.post(process.env.REACT_APP_API_URL, {
+            await apiClient.post(`${process.env.REACT_APP_API_URL}/produtos`, {
               name: formData.get('name'),
               description: formData.get('description'),
               price: formData.get('price'),
               category: formData.get('category'),
-              pictureUrl: formData.get('picture-url'),
+              pictureUrl: formData.get('pictureUrl'),
             });
             return redirect('/produtos')
           } catch (error) {

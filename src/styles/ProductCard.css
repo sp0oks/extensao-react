@@ -76,7 +76,8 @@
 
 .product-input,
 .product-input-title,
-.product-textarea {
+.product-textarea,
+.product-input-picture-url {
     width: 100%;
     padding: 0.5rem;
     border: 1px solid #ccc;
